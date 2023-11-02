@@ -1,6 +1,7 @@
 <?php
 
-namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
+namespace GroupDuaPBD\Management\Login\Php\App;
+
 
 class View
 {
