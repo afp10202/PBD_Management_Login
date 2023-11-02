@@ -2,7 +2,6 @@
 
 namespace GroupDuaPBD\Management\Login\Php\App;
 
-
 class View
 {
 
