@@ -2,10 +2,10 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use GroupDuaPBD\Management\Login\Php\App\Router;
-use GroupDuaPBD\Management\Login\Php\Controller\HomeController;
-use GroupDuaPBD\Management\Login\Php\Controller\ProductController;
-use GroupDuaPBD\Management\Login\Php\Middleware\AuthMiddleware;
+use ProgrammerZamanNow\Belajar\PHP\MVC\App\Router;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Controller\HomeController;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Controller\ProductController;
+use ProgrammerZamanNow\Belajar\PHP\MVC\Middleware\AuthMiddleware;
 
 Router::add('GET', '/products/([0-9a-zA-Z]*)/categories/([0-9a-zA-Z]*)', ProductController::class, 'categories');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php\App;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
 
 class Router
 {

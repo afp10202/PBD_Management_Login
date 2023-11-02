@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php\Middleware;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Middleware;
 
 class AuthMiddleware implements Middleware
 {

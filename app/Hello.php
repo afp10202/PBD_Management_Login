@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC;
 
 class Hello
 {

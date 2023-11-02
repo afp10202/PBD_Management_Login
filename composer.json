@@ -1,11 +1,11 @@
 {
-    "name": "group-dua-pbd/management-login-php",
-    "description": "Management Login Project for Group 2 PBD MI 5A",
+    "name": "programmer-zaman-now/belajar-php-mvc",
+    "description": "Belajar PHP MVC",
     "type": "project",
     "authors": [
         {
-            "name": "Group 2 PBD MI 5A",
-            "email": "andrifebriyadiputra@gmail.com"
+            "name": "Eko Kurniawan Khannedy",
+            "email": "echo.khannedy@gmail.com"
         }
     ],
     "require": {
@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "GroupDuaPBD\\Management\\Login\\Php\\" : "app"
+            "ProgrammerZamanNow\\Belajar\\PHP\\MVC\\" : "app"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GroupDuaPBD\\Management\\Login\\Php\\" : "test"
+            "ProgrammerZamanNow\\Belajar\\PHP\\MVC\\" : "test"
         }
     }
 }

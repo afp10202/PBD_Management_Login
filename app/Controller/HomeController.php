@@ -1,8 +1,8 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php\Controller;
+namespace ProgrammerZamanNow\Belajar\PHP\MVC\Controller;
 
-use GroupDuaPBD\Management\Login\Php\App\View;
+use ProgrammerZamanNow\Belajar\PHP\MVC\App\View;
 
 class HomeController
 {
