@@ -2,7 +2,7 @@
 
 namespace GroupDuaPBD\Management\Login\Php\Controller;
 
-use GroupDuaPBD\Management\Login\Php\Config\View;
+use GroupDuaPBD\Management\Login\Php\App\View;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
@@ -14,7 +14,7 @@ use GroupDuaPBD\Management\Login\Php\Service\UserService;
 
 class UserController
 {
-    private  UserService $userService;
+    private UserService $userService;
     private SessionService $sessionService;
 
     public function __construct()
@@ -27,13 +27,15 @@ class UserController
         $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
 
-    public function register(){
-        View::render('User/register',[
+    public function register()
+    {
+        View::render('User/register', [
             'title' => 'Register new User'
         ]);
     }
 
-    public function postRegister(){
+    public function postRegister()
+    {
         $request = new UserRegisterRequest();
         $request->id = $_POST['id'];
         $request->name = $_POST['name'];
@@ -42,8 +44,8 @@ class UserController
         try {
             $this->userService->register($request);
             View::redirect('/users/login');
-        }catch (ValidationException $exception){
-            View::render('User/register',[
+        } catch (ValidationException $exception) {
+            View::render('User/register', [
                 'title' => 'Register new User',
                 'error' => $exception->getMessage()
             ]);
@@ -52,34 +54,26 @@ class UserController
 
     public function login()
     {
-        View::render("User/Login", [
+        View::render('User/login', [
             "title" => "Login user"
         ]);
-
     }
 
     public function postLogin()
     {
         $request = new UserLoginRequest();
         $request->id = $_POST['id'];
-        $request->password =$_POST['password'];
+        $request->password = $_POST['password'];
 
         try {
-           $response = $this->userService->login($request);
-
-           $this->sessionService->create($response->user->id);
+            $response = $this->userService->login($request);
+            $this->sessionService->create($response->user->id);
             View::redirect('/');
-        }catch (validationException $exception){
-            View::render('User/login',[
+        } catch (ValidationException $exception) {
+            View::render('User/login', [
                 'title' => 'Login user',
                 'error' => $exception->getMessage()
             ]);
-
         }
-
-
-
     }
-
-
 }
