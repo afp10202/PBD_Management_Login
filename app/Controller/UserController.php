@@ -5,19 +5,26 @@ namespace GroupDuaPBD\Management\Login\Php\Controller;
 use GroupDuaPBD\Management\Login\Php\Config\View;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
+use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
+use GroupDuaPBD\Management\Login\Php\Reposittory\SessionRepository;
 use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+use GroupDuaPBD\Management\Login\Php\Service\SessionService;
 use GroupDuaPBD\Management\Login\Php\Service\UserService;
 
 class UserController
 {
     private  UserService $userService;
+    private SessionService $sessionService;
 
     public function __construct()
     {
         $connection = Database::getConnection();
         $userRepository = new UserRepository($connection);
         $this->userService = new UserService($userRepository);
+
+        $sessionRepository = new SessionRepository($connection);
+        $this->sessionService = new SessionService($sessionRepository, $userRepository);
     }
 
     public function register(){
@@ -42,5 +49,37 @@ class UserController
             ]);
         }
     }
+
+    public function login()
+    {
+        View::render("User/Login", [
+            "title" => "Login user"
+        ]);
+
+    }
+
+    public function postLogin()
+    {
+        $request = new UserLoginRequest();
+        $request->id = $_POST['id'];
+        $request->password =$_POST['password'];
+
+        try {
+           $response = $this->userService->login($request);
+
+           $this->sessionService->create($response->user->id);
+            View::redirect('/');
+        }catch (validationException $exception){
+            View::render('User/login',[
+                'title' => 'Login user',
+                'error' => $exception->getMessage()
+            ]);
+
+        }
+
+
+
+    }
+
 
 }

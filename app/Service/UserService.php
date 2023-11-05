@@ -5,6 +5,8 @@ namespace GroupDuaPBD\Management\Login\Php\Service;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
+use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
+use GroupDuaPBD\Management\Login\Php\Model\UserLoginResponse;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterResponse;
 use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
@@ -54,4 +56,34 @@ class UserService
             throw new ValidationException("Id, Name, Password can not blank");
         }
     }
+
+    public function login(UserLoginRequest $request): UserLoginResponse
+    {
+        $this->validateUserLoginRequest($request);
+
+        $user = $this->userReposittory->findById($request->id);
+        if($user ==null ){
+            throw new ValidationExceptionor ("Id or password is worng");
+        }
+        if(password_verify($request->password, $user->password)){
+            $response = new UserLoginResponse();
+            $response->user = $user;
+            return $response;
+
+        }else{
+            throw new ValidationExceptionor ("Id or password is worng");
+        }
+        }
+
+
+    private function validateUserLoginRequest(UserLoginRequest $request){
+        if($request->id == null ||  $request->password == null ||
+            trim($request->id) == "" || trim($request->password) == ""){
+            throw new ValidationException("Id, Password can not blank");
+        }
+
+    }
+
+
+
 }

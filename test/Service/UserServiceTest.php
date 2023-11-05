@@ -5,6 +5,7 @@ namespace GroupDuaPBD\Management\Login\Php\Service;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
+use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
 use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
 use PHPUnit\Framework\TestCase;
@@ -68,6 +69,53 @@ class UserServiceTest extends TestCase
         $request->password = "rahasia";
 
         $this->userService->register($request);
+    }
+    public function testLoginNotFound()
+    {
+        $this->expectException(ValidationException::class);
+
+        $request =new UserLoginRequest();
+        $request->id ="eko";
+        $request->password ="eko";
+
+        $this->userService->login($request);
+    }
+
+    public function testLoginWrongPassword()
+    {
+        $user = new User();
+        $user->id = "eko";
+        $user->name = "Eko";
+        $user->password = password_hash("eko", PASSWORD_BCRYPT);
+
+        $this->expectException(ValidationException::class);
+
+        $request =new UserLoginRequest();
+        $request->id ="eko";
+        $request->password ="salah";
+
+        $this->userService->login($request);
+
+    }
+
+    public function testLoginSuccess()
+    {
+        $user = new User();
+        $user->id = "eko";
+        $user->name = "Eko";
+        $user->password = password_hash("eko", PASSWORD_BCRYPT);
+
+        $this->expectException(ValidationException::class);
+
+        $request =new UserLoginRequest();
+        $request->id ="eko";
+        $request->password ="eko";
+
+        $response = $this->userService->login($request);
+
+        self::assertEquals($response->id, $response->user->id);
+        self::assertTrue(password_verify($request->password, $response->user->passsword));
+
     }
 
 }
