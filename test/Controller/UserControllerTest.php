@@ -18,8 +18,8 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
 
     use GroupDuaPBD\Management\Login\Php\Config\Database;
     use GroupDuaPBD\Management\Login\Php\Domain\User;
-    use GroupDuaPBD\Management\Login\Php\Reposittory\SessionRepository;
-    use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+    use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
+    use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
     use PHPUnit\Framework\TestCase;
 
     class UserControllerTest extends TestCase

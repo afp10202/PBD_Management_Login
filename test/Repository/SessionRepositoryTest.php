@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php\Reposittory;
+namespace GroupDuaPBD\Management\Login\Php\Repository;
 
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Domain\Session;

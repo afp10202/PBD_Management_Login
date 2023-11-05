@@ -1,6 +1,6 @@
 <?php
 
-namespace GroupDuaPBD\Management\Login\Php\Reposittory;
+namespace GroupDuaPBD\Management\Login\Php\Repository;
 
 use GroupDuaPBD\Management\Login\Php\Domain\Session;
 
@@ -16,7 +16,7 @@ class SessionRepository
 
     public function save(Session $session): Session
     {
-        $statement = $this->connection->prepare("INSERT INTO sessions (id, user_id) VALUES(?, ??)");
+        $statement = $this->connection->prepare("INSERT INTO sessions (id, user_id) VALUES(?, ?)");
         $statement->execute([$session->id, $session->userId]);
         return $session;
 
@@ -43,7 +43,7 @@ class SessionRepository
 
     public function deleteById(string $id):void
     {
-        $statement = $this->connection->prepare("DELETE FROM sessions WHERE id =?");
+        $statement = $this->connection->prepare("DELETE FROM sessions WHERE id = ?");
         $statement->execute([$id]);
     }
 

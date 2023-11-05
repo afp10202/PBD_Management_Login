@@ -2,8 +2,8 @@
 
 namespace GroupDuaPBD\Management\Login\Php\Service;
 
-use GroupDuaPBD\Management\Login\Php\Reposittory\SessionRepository;
-use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 
 
 class SessionService

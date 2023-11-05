@@ -7,8 +7,8 @@ use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
-use GroupDuaPBD\Management\Login\Php\Reposittory\SessionRepository;
-use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 use GroupDuaPBD\Management\Login\Php\Service\SessionService;
 use GroupDuaPBD\Management\Login\Php\Service\UserService;
 

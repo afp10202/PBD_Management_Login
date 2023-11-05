@@ -4,8 +4,8 @@ namespace GroupDuaPBD\Management\Login\Php\Controller;
 
 use GroupDuaPBD\Management\Login\Php\App\View;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
-use GroupDuaPBD\Management\Login\Php\Reposittory\SessionRepository;
-use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 use GroupDuaPBD\Management\Login\Php\Service\SessionService;
 
 class HomeController

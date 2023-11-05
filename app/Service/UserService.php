@@ -9,7 +9,7 @@ use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginResponse;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterResponse;
-use GroupDuaPBD\Management\Login\Php\Reposittory\UserRepository;
+use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 
 class UserService
 {
@@ -63,7 +63,7 @@ class UserService
 
         $user = $this->userReposittory->findById($request->id);
         if($user ==null ){
-            throw new ValidationExceptionor ("Id or password is worng");
+            throw new ValidationException ("Id or password is worng");
         }
         if(password_verify($request->password, $user->password)){
             $response = new UserLoginResponse();
@@ -71,7 +71,7 @@ class UserService
             return $response;
 
         }else{
-            throw new ValidationExceptionor ("Id or password is worng");
+            throw new ValidationException ("Id or password is worng");
         }
         }
 
