@@ -17,9 +17,11 @@ namespace GroupDuaPBD\Management\Login\Php\Service {
 namespace GroupDuaPBD\Management\Login\Php\Controller{
 
     use GroupDuaPBD\Management\Login\Php\Config\Database;
+    use GroupDuaPBD\Management\Login\Php\Domain\Session;
     use GroupDuaPBD\Management\Login\Php\Domain\User;
     use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
     use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
+    use GroupDuaPBD\Management\Login\Php\Service\SessionService;
     use PHPUnit\Framework\TestCase;
 
     class UserControllerTest extends TestCase
@@ -177,11 +179,25 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id or password is wrong]");
 
         }
+
+        public  function testLogout(){
+            $user = new User();
+            $user->id = "eko";
+            $user->name = "Eko";
+            $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+            $this->userRepository->save($user);
+
+            $session = new Session();
+            $session->id = uniqid();
+            $session->userId = $user->id;
+            $this->sessionRepository->save($session);
+
+            $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+            $this->userController->logout();
+
+            $this->expectOutputRegex("[Location: /]");
+            $this->expectOutputRegex("[X-PZN-SESSION: ]");
         }
-
-
     }
-
-
-
-
+}

@@ -7,6 +7,7 @@ use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
+use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
 use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 
@@ -14,20 +15,23 @@ class UserServiceTest extends TestCase
 {
     private UserService $userService;
     private UserRepository $userRepository;
+    private SessionRepository $sessionRepository;
 
-    protected  function setUp(): void
+    protected function setUp(): void
     {
         $connection = Database::getConnection();
         $this->userRepository = new UserRepository($connection);
         $this->userService = new UserService($this->userRepository);
+        $this->sessionRepository = new SessionRepository($connection);
 
+        $this->sessionRepository->deleteAll();
         $this->userRepository->deleteAll();
     }
 
-    public  function testRegisterSuccess()
+    public function testRegisterSuccess()
     {
         $request = new UserRegisterRequest();
-        $request->id  = "eko";
+        $request->id = "eko";
         $request->name = "Eko";
         $request->password = "rahasia";
 
@@ -45,7 +49,7 @@ class UserServiceTest extends TestCase
         $this->expectException(ValidationException::class);
 
         $request = new UserRegisterRequest();
-        $request->id  = "";
+        $request->id = "";
         $request->name = "";
         $request->password = "";
 
@@ -70,13 +74,14 @@ class UserServiceTest extends TestCase
 
         $this->userService->register($request);
     }
+
     public function testLoginNotFound()
     {
         $this->expectException(ValidationException::class);
 
-        $request =new UserLoginRequest();
-        $request->id ="eko";
-        $request->password ="eko";
+        $request = new UserLoginRequest();
+        $request->id = "eko";
+        $request->password = "eko";
 
         $this->userService->login($request);
     }
@@ -90,12 +95,11 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $request =new UserLoginRequest();
-        $request->id ="eko";
-        $request->password ="salah";
+        $request = new UserLoginRequest();
+        $request->id = "eko";
+        $request->password = "salah";
 
         $this->userService->login($request);
-
     }
 
     public function testLoginSuccess()
@@ -107,15 +111,54 @@ class UserServiceTest extends TestCase
 
         $this->expectException(ValidationException::class);
 
-        $request =new UserLoginRequest();
-        $request->id ="eko";
-        $request->password ="eko";
+        $request = new UserLoginRequest();
+        $request->id = "eko";
+        $request->password = "eko";
 
         $response = $this->userService->login($request);
 
-        self::assertEquals($response->id, $response->user->id);
-        self::assertTrue(password_verify($request->password, $response->user->passsword));
-
+        self::assertEquals($request->id, $response->user->id);
+        self::assertTrue(password_verify($request->password, $response->user->password));
     }
 
+    public function testUpdateSuccess()
+    {
+        $user = new User();
+        $user->id = "eko";
+        $user->name = "Eko";
+        $user->password = password_hash("eko", PASSWORD_BCRYPT);
+        $this->userRepository->save($user);
+
+        $request = new UserProfileUpdateRequest();
+        $request->id = "eko";
+        $request->name = "Budi";
+
+        $this->userService->updateProfile($request);
+
+        $result = $this->userRepository->findById($user->id);
+
+        self::assertEquals($request->name, $result->name);
+    }
+
+    public function testUpdateValidationError()
+    {
+        $this->expectException(ValidationException::class);
+
+        $request = new UserProfileUpdateRequest();
+        $request->id = "";
+        $request->name = "";
+
+        $this->userService->updateProfile($request);
+    }
+
+    public function testUpdateNotFound()
+    {
+        $this->expectException(ValidationException::class);
+
+        $request = new UserProfileUpdateRequest();
+        $request->id = "eko";
+        $request->name = "Budi";
+
+        $this->userService->updateProfile($request);
+    }
 }

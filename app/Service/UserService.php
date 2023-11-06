@@ -7,6 +7,8 @@ use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginResponse;
+use GroupDuaPBD\Management\Login\Php\Model\UserProfileUpdateRequest;
+use GroupDuaPBD\Management\Login\Php\Model\UserProfileUpdateResponse;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterResponse;
 use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
@@ -77,6 +79,7 @@ class UserService
 
 
     private function validateUserLoginRequest(UserLoginRequest $request){
+
         if($request->id == null ||  $request->password == null ||
             trim($request->id) == "" || trim($request->password) == ""){
             throw new ValidationException("Id, Password can not blank");
@@ -84,6 +87,37 @@ class UserService
 
     }
 
+    public function updateProfile(UserProfileUpdateRequest $request): UserProfileUpdateResponse{
+        $this->validateUserProfileUpdateRequest($request);
 
+        try {
+            Database::beginTransaction();
+
+            $user = $this->userRepository->findById($request->id);
+            if($user == null){
+                throw new ValidationException("User is not found");
+            }
+
+            $user->name = $request->name;
+            $this->userRepository->update($user);
+
+            Database::commitTransaction();
+
+            $response = new UserProfileUpdateResponse();
+            $response->user = $user;
+            return $response;
+
+        }catch (\Exception $exception){
+            Database::rollbackTransaction();
+            throw $exception;
+
+        }
+    }
+    private function validateUserProfileUpdateRequest(UserProfileUpdateRequest $request){
+    if($request->id == null ||  $request->password == null ||
+        trim($request->id) == "" || trim($request->password) == ""){
+        throw new ValidationException("Id, Password can not blank");
+    }
+}
 
 }

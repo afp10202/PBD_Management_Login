@@ -3,6 +3,7 @@
 namespace GroupDuaPBD\Management\Login\Php\Repository;
 
 use GroupDuaPBD\Management\Login\Php\Domain\User;
+use mysql_xdevapi\Statement;
 
 class UserRepository
 {
@@ -17,6 +18,14 @@ class UserRepository
         $statement = $this->connection->prepare("INSERT INTO users(id, name, password) VALUES(?, ?, ?)");
         $statement->execute([
             $user->id, $user->name, $user->password
+        ]);
+        return $user;
+    }
+
+    public function update(User $user): User{
+        $statement= $this->connection->prepare("UPDATE users SET name = ? WHERE id = ?");
+        $statement->execute([
+            $user->name, $user->password, $user->id
         ]);
         return $user;
     }
