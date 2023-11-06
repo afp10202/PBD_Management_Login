@@ -3,7 +3,6 @@
 namespace GroupDuaPBD\Management\Login\Php\Repository;
 
 use GroupDuaPBD\Management\Login\Php\Domain\User;
-use mysql_xdevapi\Statement;
 
 class UserRepository
 {

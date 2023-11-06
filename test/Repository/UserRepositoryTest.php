@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserRepositoryTest extends TestCase
 {
+
     private UserRepository $userRepository;
     private SessionRepository $sessionRepository;
 
@@ -17,7 +18,7 @@ class UserRepositoryTest extends TestCase
         $this->sessionRepository->deleteAll();
 
         $this->userRepository = new UserRepository(Database::getConnection());
-        $this->userRepository->deleteAll();;
+        $this->userRepository->deleteAll();
     }
 
     public function testSaveSuccess()

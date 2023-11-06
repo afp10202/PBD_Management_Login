@@ -29,20 +29,21 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
         private UserController $userController;
         private UserRepository $userRepository;
         private SessionRepository $sessionRepository;
-        protected function setUp():void
-        {
 
+        protected function setUp(): void
+        {
             $this->userController = new UserController();
 
             $this->sessionRepository = new SessionRepository(Database::getConnection());
-            $this->sessionRepository->deleteById();
+            $this->sessionRepository->deleteAll();
 
-            $userRepository = new UserRepository(Database::getConnection());
-            $userRepository->deleteAll();
+            $this->userRepository = new UserRepository(Database::getConnection());
+            $this->userRepository->deleteAll();
 
             putenv("mode=test");
         }
-        public  function testRegister()
+
+        public function testRegister()
         {
             $this->userController->register();
 
@@ -50,7 +51,7 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Name]");
             $this->expectOutputRegex("[Password]");
-            $this->expectOutputRegex("[Register new user]");
+            $this->expectOutputRegex("[Register new User]");
         }
 
         public function testPostRegisterSuccess()
@@ -76,10 +77,8 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Name]");
             $this->expectOutputRegex("[Password]");
-            $this->expectOutputRegex("[Register new user]");
+            $this->expectOutputRegex("[Register new User]");
             $this->expectOutputRegex("[Id, Name, Password can not blank]");
-
-
         }
 
         public function testPostRegisterDuplicate()
@@ -91,7 +90,7 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
 
             $this->userRepository->save($user);
 
-            $_POST['id'] = '';
+            $_POST['id'] = 'eko';
             $_POST['name'] = 'Eko';
             $_POST['password'] = 'rahasia';
 
@@ -101,10 +100,10 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Name]");
             $this->expectOutputRegex("[Password]");
-            $this->expectOutputRegex("[Register new user]");
+            $this->expectOutputRegex("[Register new User]");
             $this->expectOutputRegex("[User Id already exists]");
-
         }
+
         public function testLogin()
         {
             $this->userController->login();
@@ -113,6 +112,7 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Password]");
         }
+
         public function testLoginSuccess()
         {
             $user = new User();
@@ -122,20 +122,19 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
 
             $this->userRepository->save($user);
 
-            $_POST['id'] ='eko';
-            $_POST['password'] ='rahasia';
+            $_POST['id'] = 'eko';
+            $_POST['password'] = 'rahasia';
 
             $this->userController->postLogin();
 
-            $this->expectOutputRegex("[Location /]");
+            $this->expectOutputRegex("[Location: /]");
             $this->expectOutputRegex("[X-PZN-SESSION: ]");
-
         }
 
-        public function testLoginValidation()
+        public function testLoginValidationError()
         {
-            $_POST['id'] ='';
-            $_POST['password'] ='';
+            $_POST['id'] = '';
+            $_POST['password'] = '';
 
             $this->userController->postLogin();
 
@@ -143,13 +142,12 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Password]");
             $this->expectOutputRegex("[Id, Password can not blank]");
-
         }
 
-        public function testLoginNotFound()
+        public function testLoginUserNotFound()
         {
-            $_POST['id'] ='notfound';
-            $_POST['password'] ='notfound';
+            $_POST['id'] = 'notfound';
+            $_POST['password'] = 'notfound';
 
             $this->userController->postLogin();
 
@@ -157,19 +155,19 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Password]");
             $this->expectOutputRegex("[Id or password is wrong]");
-
         }
+
         public function testLoginWrongPassword()
         {
             $user = new User();
             $user->id = "eko";
             $user->name = "Eko";
-            $user->password = "rahasia";
+            $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
 
             $this->userRepository->save($user);
 
-            $_POST['id'] ='eko';
-            $_POST['password'] ='salah';
+            $_POST['id'] = 'eko';
+            $_POST['password'] = 'salah';
 
             $this->userController->postLogin();
 
@@ -177,10 +175,10 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
             $this->expectOutputRegex("[Id]");
             $this->expectOutputRegex("[Password]");
             $this->expectOutputRegex("[Id or password is wrong]");
-
         }
 
-        public  function testLogout(){
+        public function testLogout()
+        {
             $user = new User();
             $user->id = "eko";
             $user->name = "Eko";
@@ -198,6 +196,79 @@ namespace GroupDuaPBD\Management\Login\Php\Controller{
 
             $this->expectOutputRegex("[Location: /]");
             $this->expectOutputRegex("[X-PZN-SESSION: ]");
+        }
+
+        public function testUpdateProfile()
+        {
+            $user = new User();
+            $user->id = "eko";
+            $user->name = "Eko";
+            $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+            $this->userRepository->save($user);
+
+            $session = new Session();
+            $session->id = uniqid();
+            $session->userId = $user->id;
+            $this->sessionRepository->save($session);
+
+            $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+            $this->userController->updateProfile();
+
+            $this->expectOutputRegex("[Profile]");
+            $this->expectOutputRegex("[Id]");
+            $this->expectOutputRegex("[eko]");
+            $this->expectOutputRegex("[Name]");
+            $this->expectOutputRegex("[Eko]");
+        }
+
+        public function testPostUpdateProfileSuccess()
+        {
+            $user = new User();
+            $user->id = "eko";
+            $user->name = "Eko";
+            $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+            $this->userRepository->save($user);
+
+            $session = new Session();
+            $session->id = uniqid();
+            $session->userId = $user->id;
+            $this->sessionRepository->save($session);
+
+            $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+            $_POST['name'] = 'Budi';
+            $this->userController->postUpdateProfile();
+
+            $this->expectOutputRegex("[Location: /]");
+
+            $result = $this->userRepository->findById("eko");
+            self::assertEquals("Budi", $result->name);
+        }
+
+        public function testPostUpdateProfileValidationError()
+        {
+            $user = new User();
+            $user->id = "eko";
+            $user->name = "Eko";
+            $user->password = password_hash("rahasia", PASSWORD_BCRYPT);
+            $this->userRepository->save($user);
+
+            $session = new Session();
+            $session->id = uniqid();
+            $session->userId = $user->id;
+            $this->sessionRepository->save($session);
+
+            $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
+            $_POST['name'] = '';
+            $this->userController->postUpdateProfile();
+
+            $this->expectOutputRegex("[Profile]");
+            $this->expectOutputRegex("[Id]");
+            $this->expectOutputRegex("[eko]");
+            $this->expectOutputRegex("[Name]");
+            $this->expectOutputRegex("[Id, Name can not blank]");
         }
     }
 }

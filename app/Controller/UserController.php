@@ -77,7 +77,8 @@ class UserController
         }
     }
 
-    public function logout(){
+    public function logout()
+    {
         $this->sessionService->destroy();
         View::redirect("/");
     }
@@ -94,6 +95,7 @@ class UserController
             ]
         ]);
     }
+
     public function postUpdateProfile()
     {
         $user = $this->sessionService->current();

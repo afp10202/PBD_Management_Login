@@ -99,7 +99,7 @@ class UserService
             }
 
             $user->name = $request->name;
-            $this->userRepository->update($user);
+            $this->userRepository->save($user);
 
             Database::commitTransaction();
 

@@ -7,6 +7,7 @@ use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
+use GroupDuaPBD\Management\Login\Php\Model\UserProfileUpdateRequest;
 use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
 use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;

@@ -26,35 +26,31 @@ class HomeControllerTest extends TestCase
         $this->userRepository->deleteAll();
     }
 
-
     public function testGuest()
     {
         $this->homeController->index();
 
         $this->expectOutputRegex("[Login Management]");
-
     }
 
     public function testUserLogin()
     {
         $user = new User();
-        $user->id ="eko";
-        $user->name ="Eko";
+        $user->id = "eko";
+        $user->name = "Eko";
         $user->password = "rahasia";
         $this->userRepository->save($user);
 
         $session = new Session();
-        $session = uniqid();
-        $session->userId= $user->id;
+        $session->id = uniqid();
+        $session->userId = $user->id;
         $this->sessionRepository->save($session);
 
         $_COOKIE[SessionService::$COOKIE_NAME] = $session->id;
+
         $this->homeController->index();
 
         $this->expectOutputRegex("[Hello Eko]");
     }
-
-
-
 
 }

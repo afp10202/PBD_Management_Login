@@ -9,6 +9,7 @@ namespace GroupDuaPBD\Management\Login\Php\App {
 namespace GroupDuaPBD\Management\Login\Php\Middleware{
 
     use GroupDuaPBD\Management\Login\Php\Config\Database;
+    use GroupDuaPBD\Management\Login\Php\Domain\User;
     use GroupDuaPBD\Management\Login\Php\Domain\Session;
     use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
     use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;

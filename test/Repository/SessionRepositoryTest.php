@@ -3,6 +3,7 @@
 namespace GroupDuaPBD\Management\Login\Php\Repository;
 
 use GroupDuaPBD\Management\Login\Php\Config\Database;
+use GroupDuaPBD\Management\Login\Php\Domain\User;
 use GroupDuaPBD\Management\Login\Php\Domain\Session;
 use PHPUnit\Framework\TestCase;
 
@@ -16,8 +17,8 @@ class SessionRepositoryTest extends TestCase
         $this->userRepository = new UserRepository(Database::getConnection());
         $this->sessionRepository = new SessionRepository(Database::getConnection());
 
-        $this->userRepository->deleteAll();
         $this->sessionRepository->deleteAll();
+        $this->userRepository->deleteAll();
 
         $user = new User();
         $user->id = "eko";
@@ -26,26 +27,24 @@ class SessionRepositoryTest extends TestCase
         $this->userRepository->save($user);
     }
 
-    public function testSaveSucess()
+    public function testSaveSuccess()
     {
         $session = new Session();
         $session->id = uniqid();
-        $session->userId = 'eko';
+        $session->userId = "eko";
 
         $this->sessionRepository->save($session);
 
         $result = $this->sessionRepository->findById($session->id);
         self::assertEquals($session->id, $result->id);
         self::assertEquals($session->userId, $result->userId);
-
-
     }
 
-    public function testDeleteByIdSucess()
+    public function testDeleteByIdSuccess()
     {
         $session = new Session();
         $session->id = uniqid();
-        $session->userId = 'eko';
+        $session->userId = "eko";
 
         $this->sessionRepository->save($session);
 
@@ -57,7 +56,6 @@ class SessionRepositoryTest extends TestCase
 
         $result = $this->sessionRepository->findById($session->id);
         self::assertNull($result);
-
     }
 
     public function testFindByIdNotFound()
