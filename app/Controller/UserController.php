@@ -6,6 +6,7 @@ use GroupDuaPBD\Management\Login\Php\App\View;
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Exception\ValidationException;
 use GroupDuaPBD\Management\Login\Php\Model\UserLoginRequest;
+use GroupDuaPBD\Management\Login\Php\Model\UserProfileUpdateRequest;
 use GroupDuaPBD\Management\Login\Php\Model\UserRegisterRequest;
 use GroupDuaPBD\Management\Login\Php\Repository\SessionRepository;
 use GroupDuaPBD\Management\Login\Php\Repository\UserRepository;
@@ -79,11 +80,11 @@ class UserController
 
     public function logout()
     {
-        $this->sessionService->destroy();
+        $this->sessionService->destory();
         View::redirect("/");
     }
 
-    public function updateProfile()
+    public function updateprofile()
     {
         $user = $this->sessionService->current();
 
