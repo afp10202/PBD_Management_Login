@@ -2,6 +2,8 @@
 
 namespace GroupDuaPBD\Management\Login\Php\Service;
 
+require_once __DIR__ . '/../Helper/helper.php';
+
 use GroupDuaPBD\Management\Login\Php\Config\Database;
 use GroupDuaPBD\Management\Login\Php\Domain\Session;
 use GroupDuaPBD\Management\Login\Php\Domain\User;

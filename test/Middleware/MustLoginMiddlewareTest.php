@@ -1,12 +1,8 @@
 <?php
-namespace GroupDuaPBD\Management\Login\Php\App {
-
-    function header(string $value){
-        echo $value;
-    }
-}
 
 namespace GroupDuaPBD\Management\Login\Php\Middleware{
+
+    require_once __DIR__ . '/../Helper/helper.php';
 
     use GroupDuaPBD\Management\Login\Php\Config\Database;
     use GroupDuaPBD\Management\Login\Php\Domain\Session;
@@ -18,7 +14,7 @@ namespace GroupDuaPBD\Management\Login\Php\Middleware{
 
     class MustLoginMiddlewareTest extends TestCase
     {
-        private MustNotLoginMiddleware $middleware;
+        private MustLoginMiddleware $middleware;
         private UserRepository $userRepository;
         private SessionRepository $sessionRepository;
 
