@@ -80,7 +80,7 @@ class UserController
 
     public function logout()
     {
-        $this->sessionService->destory();
+        $this->sessionService->destroy();
         View::redirect("/");
     }
 
