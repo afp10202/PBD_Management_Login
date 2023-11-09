@@ -1,20 +1,8 @@
 <?php
-namespace GroupDuaPBD\Management\Login\Php\App {
-
-    function header(string $value){
-        echo $value;
-    }
-}
-
-namespace GroupDuaPBD\Management\Login\Php\Service {
-    function setcookie(string $name, string $value)
-    {
-        echo "$name: $value";
-    }
-}
-
 
 namespace GroupDuaPBD\Management\Login\Php\Controller{
+
+    require_once __DIR__ . '/../Helper/helper.php';
 
     use GroupDuaPBD\Management\Login\Php\Config\Database;
     use GroupDuaPBD\Management\Login\Php\Domain\Session;

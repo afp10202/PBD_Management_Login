@@ -61,7 +61,6 @@ class SessionServiceTest extends TestCase
         $result = $this->sessionRepository->findById($session->id);
         self::assertNull($result);
     }
-
     public function testCurrent()
     {
         $session = new Session();

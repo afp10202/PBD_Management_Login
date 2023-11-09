@@ -13,7 +13,6 @@ class SessionService
 
     public static string $COOKIE_NAME = "X-PZN-SESSION";
 
-
     private SessionRepository $sessionRepository;
     private UserRepository $userRepository;
 
@@ -27,7 +26,7 @@ class SessionService
     {
         $session = new Session();
         $session->id = uniqid();
-        $session->userId =$userId;
+        $session->userId = $userId;
 
         $this->sessionRepository->save($session);
 
@@ -36,24 +35,23 @@ class SessionService
         return $session;
     }
 
-    public function destory()
+    public function destroy()
     {
-        $sesionId = $_COOKIE[self::$COOKIE_NAME] ??'';
-        $this->sessionRepository->deleteById($sesionId);
+        $sessionId = $_COOKIE[self::$COOKIE_NAME] ?? '';
+        $this->sessionRepository->deleteById($sessionId);
 
-        setcookie(self::$COOKIE_NAME, '',1, "/");
+        setcookie(self::$COOKIE_NAME, '', 1, "/");
     }
 
     public function current(): ?User
     {
-        $sesionId = $_COOKIE[self::$COOKIE_NAME] ??'';
+        $sessionId = $_COOKIE[self::$COOKIE_NAME] ?? '';
 
-        $session = $this->sessionRepository->findById($sesionId);
-        if ($session== null){
+        $session = $this->sessionRepository->findById($sessionId);
+        if ($session == null) {
             return null;
         }
 
-       return $this->userRepository->findById($session->userId);
+        return $this->userRepository->findById($session->userId);
     }
-
 }
